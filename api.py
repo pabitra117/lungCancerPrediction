@@ -17,7 +17,7 @@ CORS(app)
 
 # ── Configuration ──────────────────────────────────────────────
 MODELS_DIR = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), "..", "saved_models"
+    os.path.dirname(os.path.abspath(__file__)), "saved_models"
 )
 
 MODEL_DISPLAY_NAMES = {
