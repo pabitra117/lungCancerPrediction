@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Evaluate your lung cancer risk using machine learning models trained on clinical survey data. Enter your health information for an instant risk assessment.">
+    <title>LungCheck — Lung Cancer Risk Predictor</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🫁</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- ─── Header ──────────────────────────────────────── -->
+    <header id="site-header">
+        <div class="container header-inner">
+            <a href="#" class="logo" aria-label="LungCheck home">
+                <svg class="logo-icon" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+                    <rect x="12" y="2" width="4" height="10" rx="2" fill="currentColor" opacity="0.7" />
+                    <path d="M14 12 Q8 16 6 22 Q4 28 10 28 Q14 28 14 24" stroke="currentColor" stroke-width="2.2"
+                        fill="none" stroke-linecap="round" />
+                    <path d="M14 12 Q20 16 22 22 Q24 28 18 28 Q14 28 14 24" stroke="currentColor" stroke-width="2.2"
+                        fill="none" stroke-linecap="round" />
+                </svg>
+                <span>LungCheck</span>
+            </a>
+            <nav aria-label="Main navigation">
+                <a href="#hero">Home</a>
+                <a href="#assessment">Assessment</a>
+                <a href="#about">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- ─── Hero ────────────────────────────────────── -->
+        <section id="hero" class="hero">
+            <div class="container hero-inner">
+                <div class="hero-text">
+                    <h1>Your lungs tell a story.<br><span class="accent">Let's listen.</span></h1>
+                    <p>A quick health assessment powered by machine learning — trained on real clinical survey data — to
+                        evaluate your lung cancer risk factors.</p>
+                    <a href="#assessment" class="btn btn-primary">Start Assessment</a>
+                </div>
+                <div class="hero-visual" aria-hidden="true">
+                    <svg class="lung-svg" viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Trachea -->
+                        <rect class="lung-trachea" x="95" y="12" width="10" height="55" rx="5" fill="var(--sky)"
+                            opacity="0.5" />
+                        <!-- Bronchi -->
+                        <path class="lung-bronchi" d="M100 67 Q78 88 58 108" stroke="var(--sky)" stroke-width="4.5"
+                            stroke-linecap="round" opacity="0.4" />
+                        <path class="lung-bronchi" d="M100 67 Q122 88 142 108" stroke="var(--sky)" stroke-width="4.5"
+                            stroke-linecap="round" opacity="0.4" />
+                        <!-- Left lung -->
+                        <ellipse class="lung-lobe lung-lobe-left" cx="58" cy="160" rx="44" ry="62"
+                            fill="var(--sky-ghost)" stroke="var(--sky)" stroke-width="1.5" />
+                        <!-- Right lung -->
+                        <ellipse class="lung-lobe lung-lobe-right" cx="142" cy="160" rx="44" ry="62"
+                            fill="var(--sky-ghost)" stroke="var(--sky)" stroke-width="1.5" />
+                        <!-- Inner detail lines -->
+                        <path d="M58 120 Q50 140 52 165" stroke="var(--sky)" stroke-width="1" opacity="0.25"
+                            fill="none" stroke-linecap="round" />
+                        <path d="M58 120 Q66 145 62 170" stroke="var(--sky)" stroke-width="1" opacity="0.25"
+                            fill="none" stroke-linecap="round" />
+                        <path d="M142 120 Q134 140 136 165" stroke="var(--sky)" stroke-width="1" opacity="0.25"
+                            fill="none" stroke-linecap="round" />
+                        <path d="M142 120 Q150 145 148 170" stroke="var(--sky)" stroke-width="1" opacity="0.25"
+                            fill="none" stroke-linecap="round" />
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── Assessment ──────────────────────────────── -->
+        <section id="assessment" class="assessment">
+            <div class="container">
+                <div class="section-heading">
+                    <h2>Health Assessment</h2>
+                    <p>Answer each question honestly for the most accurate evaluation</p>
+                </div>
+
+                <form id="predictionForm" novalidate>
+                    <!-- Model Selection -->
+                    <div class="card card-model">
+                        <div class="card-label">Prediction Model</div>
+                        <select id="modelSelect" aria-label="Choose a machine learning model">
+                            <option value="random_forest">Random Forest</option>
+                            <option value="xgboost">XGBoost</option>
+                            <option value="gradient_boosting">Gradient Boosting</option>
+                            <option value="logistic_regression">Logistic Regression</option>
+                            <option value="decision_tree">Decision Tree</option>
+                            <option value="knn">K-Nearest Neighbors</option>
+                            <option value="gaussian_nb">Gaussian Naive Bayes</option>
+                            <option value="multinomial_nb">Multinomial Naive Bayes</option>
+                            <option value="svc">Support Vector Classifier</option>
+                            <option value="mlp">MLP (Neural Network)</option>
+                        </select>
+                    </div>
+
+                    <!-- Personal Information -->
+                    <div class="card">
+                        <h3 class="card-title">Personal Information</h3>
+                        <div class="field-row">
+                            <div class="field">
+                                <label for="gender">Gender</label>
+                                <select id="gender" required>
+                                    <option value="" disabled selected>Select</option>
+                                    <option value="1">Male</option>
+                                    <option value="0">Female</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label for="age">Age</label>
+                                <input type="number" id="age" min="18" max="100" placeholder="e.g. 45" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Habits -->
+                    <div class="card">
+                        <h3 class="card-title">Habits</h3>
+                        <div class="toggle-grid">
+                            <div class="toggle-field">
+                                <span class="toggle-label">Smoking</span>
+                                <label class="toggle" aria-label="Smoking">
+                                    <input type="checkbox" id="smoking">
+                                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                    <span class="toggle-state"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-field">
+                                <span class="toggle-label">Alcohol Consuming</span>
+                                <label class="toggle" aria-label="Alcohol Consuming">
+                                    <input type="checkbox" id="alcohol">
+                                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                    <span class="toggle-state"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Health Conditions -->
+                    <div class="card">
+                        <h3 class="card-title">Health Conditions</h3>
+                        <div class="toggle-grid">
+                            <div class="toggle-field">
+                                <span class="toggle-label">Chronic Disease</span>
+                                <label class="toggle" aria-label="Chronic Disease">
+                                    <input type="checkbox" id="chronic_disease">
+                                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                    <span class="toggle-state"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-field">
+                                <span class="toggle-label">Allergy</span>
+                                <label class="toggle" aria-label="Allergy">
+                                    <input type="checkbox" id="allergy">
+                                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                    <span class="toggle-state"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-field">
+                                <span class="toggle-label">Peer Pressure</span>
+                                <label class="toggle" aria-label="Peer Pressure">
+                                    <input type="checkbox" id="peer_pressure">
+                                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                    <span class="toggle-state"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Current Symptoms -->
+                    <div class="card">
+                        <h3 class="card-title">Current Symptoms</h3>
+                        <div class="toggle-grid">
+                            <div class="toggle-field">
+                                <span class="toggle-label">Yellow Fingers</span>
+                                <label class="toggle" aria-label="Yellow Fingers">
+                                    <input type="checkbox" id="yellow_fingers">
+                                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                    <span class="toggle-state"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-field">
+                                <span class="toggle-label">Anxiety</span>
+                                <label class="toggle" aria-label="Anxiety">
+                                    <input type="checkbox" id="anxiety">
+                                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                    <span class="toggle-state"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-field">
+                                <span class="toggle-label">Fatigue</span>
+                                <label class="toggle" aria-label="Fatigue">
+                                    <input type="checkbox" id="fatigue">
+                                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                    <span class="toggle-state"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-field">
+                                <span class="toggle-label">Wheezing</span>
+                                <label class="toggle" aria-label="Wheezing">
+                                    <input type="checkbox" id="wheezing">
+                                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                    <span class="toggle-state"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-field">
+                                <span class="toggle-label">Coughing</span>
+                                <label class="toggle" aria-label="Coughing">
+                                    <input type="checkbox" id="coughing">
+                                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                    <span class="toggle-state"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-field">
+                                <span class="toggle-label">Shortness of Breath</span>
+                                <label class="toggle" aria-label="Shortness of Breath">
+                                    <input type="checkbox" id="shortness_of_breath">
+                                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                    <span class="toggle-state"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-field">
+                                <span class="toggle-label">Swallowing Difficulty</span>
+                                <label class="toggle" aria-label="Swallowing Difficulty">
+                                    <input type="checkbox" id="swallowing_difficulty">
+                                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                    <span class="toggle-state"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-field">
+                                <span class="toggle-label">Chest Pain</span>
+                                <label class="toggle" aria-label="Chest Pain">
+                                    <input type="checkbox" id="chest_pain">
+                                    <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                    <span class="toggle-state"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" id="submitBtn" class="btn btn-primary btn-submit">
+                        <span class="btn-label">Calculate Risk</span>
+                        <span class="btn-loader" aria-hidden="true"></span>
+                    </button>
+                </form>
+
+                <!-- ─── Results ─────────────────────────────── -->
+                <div id="results" class="results hidden" aria-live="polite">
+                    <!-- Filled dynamically by script.js -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── About ───────────────────────────────────── -->
+        <section id="about" class="about">
+            <div class="container">
+                <div class="section-heading">
+                    <h2>About Lung Cancer</h2>
+                </div>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="16" x2="12" y2="12" />
+                                <line x1="12" y1="8" x2="12.01" y2="8" />
+                            </svg>
+                        </div>
+                        <h4>What is Lung Cancer?</h4>
+                        <p>A type of cancer that begins in the lungs — the two spongy organs in your chest that take in
+                            oxygen and release carbon dioxide. It's the leading cause of cancer deaths worldwide.</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg>
+                        </div>
+                        <h4>Prevention</h4>
+                        <p>Avoiding smoking, reducing exposure to pollutants, eating a healthy diet rich in fruits and
+                            vegetables, and staying physically active can meaningfully lower your risk.</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </div>
+                        <h4>Early Detection</h4>
+                        <p>Regular screenings — especially low-dose CT scans for high-risk individuals — and awareness of
+                            persistent symptoms can lead to earlier diagnosis and far better outcomes.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ─── Footer ──────────────────────────────────────── -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 LungCheck. For educational purposes only — not a medical diagnosis.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
